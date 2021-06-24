@@ -1,8 +1,9 @@
-use pyo3::types::{PyDict, PyList, PyTuple};
-use pyo3::{IntoPy, PyNativeType, PyObject, Python};
+use pyo3::types::{PyList, PyTuple};
+use pyo3::{IntoPy, PyObject, Python};
 use serde::{ser, Serialize};
 
 use crate::error::{PythonizeError, Result};
+use crate::py::Dict as PyDict;
 
 /// Attempt to convert the given data into a Python object
 pub fn pythonize<T>(py: Python, value: &T) -> Result<PyObject>
@@ -37,12 +38,14 @@ pub struct PythonStructVariantSerializer<'py> {
 
 #[doc(hidden)]
 pub struct PythonDictSerializer<'py> {
-    dict: &'py PyDict,
+    py: Python<'py>,
+    dict: PyDict,
 }
 
 #[doc(hidden)]
 pub struct PythonMapSerializer<'py> {
-    dict: &'py PyDict,
+    py: Python<'py>,
+    dict: PyDict,
     key: Option<PyObject>,
 }
 
@@ -158,9 +161,9 @@ impl<'py> ser::Serializer for Pythonizer<'py> {
     where
         T: ?Sized + Serialize,
     {
-        let d = PyDict::new(self.py);
-        d.set_item(variant, value.serialize(self)?)?;
-        Ok(d.into())
+        let mut d = PyDict::new();
+        d.set_item(self.py, variant, value.serialize(self)?)?;
+        Ok(d.into_py(self.py))
     }
 
     fn serialize_seq(self, len: Option<usize>) -> Result<PythonCollectionSerializer<'py>> {
@@ -199,7 +202,8 @@ impl<'py> ser::Serializer for Pythonizer<'py> {
 
     fn serialize_map(self, _len: Option<usize>) -> Result<PythonMapSerializer<'py>> {
         Ok(PythonMapSerializer {
-            dict: PyDict::new(self.py),
+            py: self.py,
+            dict: PyDict::new(),
             key: None,
         })
     }
@@ -210,7 +214,8 @@ impl<'py> ser::Serializer for Pythonizer<'py> {
         _len: usize,
     ) -> Result<PythonDictSerializer<'py>> {
         Ok(PythonDictSerializer {
-            dict: PyDict::new(self.py),
+            py: self.py,
+            dict: PyDict::new(),
         })
     }
 
@@ -224,7 +229,8 @@ impl<'py> ser::Serializer for Pythonizer<'py> {
         Ok(PythonStructVariantSerializer {
             variant,
             inner: PythonDictSerializer {
-                dict: PyDict::new(self.py),
+                py: self.py,
+                dict: PyDict::new(),
             },
         })
     }
@@ -291,13 +297,14 @@ impl ser::SerializeTupleVariant for PythonTupleVariantSerializer<'_> {
     }
 
     fn end(self) -> Result<PyObject> {
-        let d = PyDict::new(self.inner.py);
-        d.set_item(self.variant, ser::SerializeTuple::end(self.inner)?)?;
-        Ok(d.into())
+        let mut d = PyDict::new();
+        let py = self.inner.py;
+        d.set_item(py, self.variant, ser::SerializeTuple::end(self.inner)?)?;
+        Ok(d.into_py(py))
     }
 }
 
-impl ser::SerializeMap for PythonMapSerializer<'_> {
+impl<'py> ser::SerializeMap for PythonMapSerializer<'py> {
     type Ok = PyObject;
     type Error = PythonizeError;
 
@@ -305,8 +312,10 @@ impl ser::SerializeMap for PythonMapSerializer<'_> {
     where
         T: ?Sized + Serialize,
     {
-        self.key = Some(pythonize(self.dict.py(), key)?);
-        Ok(())
+        Python::with_gil(|py| -> Result<()> {
+            self.key = Some(pythonize(py, key)?);
+            Ok(())
+        })
     }
 
     fn serialize_value<T>(&mut self, value: &T) -> Result<()>
@@ -314,20 +323,21 @@ impl ser::SerializeMap for PythonMapSerializer<'_> {
         T: ?Sized + Serialize,
     {
         self.dict.set_item(
+            self.py,
             self.key
                 .take()
                 .expect("serialize_value should always be called after serialize_key"),
-            pythonize(self.dict.py(), value)?,
+            pythonize(self.py, value)?,
         )?;
         Ok(())
     }
 
     fn end(self) -> Result<PyObject> {
-        Ok(self.dict.into())
+        Ok(self.dict.into_py(self.py))
     }
 }
 
-impl ser::SerializeStruct for PythonDictSerializer<'_> {
+impl<'py> ser::SerializeStruct for PythonDictSerializer<'py> {
     type Ok = PyObject;
     type Error = PythonizeError;
 
@@ -335,15 +345,17 @@ impl ser::SerializeStruct for PythonDictSerializer<'_> {
     where
         T: ?Sized + Serialize,
     {
-        Ok(self.dict.set_item(key, pythonize(self.dict.py(), value)?)?)
+        Ok(self
+            .dict
+            .set_item(self.py, key, pythonize(self.py, value)?)?)
     }
 
     fn end(self) -> Result<PyObject> {
-        Ok(self.dict.into())
+        Ok(self.dict.into_py(self.py))
     }
 }
 
-impl ser::SerializeStructVariant for PythonStructVariantSerializer<'_> {
+impl<'py> ser::SerializeStructVariant for PythonStructVariantSerializer<'py> {
     type Ok = PyObject;
     type Error = PythonizeError;
 
@@ -353,14 +365,18 @@ impl ser::SerializeStructVariant for PythonStructVariantSerializer<'_> {
     {
         self.inner
             .dict
-            .set_item(key, pythonize(self.inner.dict.py(), value)?)?;
+            .set_item(self.inner.py, key, pythonize(self.inner.py, value)?)?;
         Ok(())
     }
 
     fn end(self) -> Result<PyObject> {
-        let d = PyDict::new(self.inner.dict.py());
-        d.set_item(self.variant, self.inner.dict)?;
-        Ok(d.into())
+        let mut d = PyDict::new();
+        d.set_item(
+            self.inner.py,
+            self.variant,
+            self.inner.dict.into_py(self.inner.py),
+        )?;
+        Ok(d.into_py(self.inner.py))
     }
 }
 

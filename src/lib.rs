@@ -38,6 +38,7 @@
 //! ```
 mod de;
 mod error;
+pub mod py;
 mod ser;
 
 pub use crate::de::depythonize;
