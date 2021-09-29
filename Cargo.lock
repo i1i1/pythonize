@@ -3,17 +3,6 @@
 version = 3
 
 [[package]]
-name = "actor_derive"
-version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
-dependencies = [
- "proc-macro-error",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "addr2line"
 version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -355,9 +344,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.0.70"
+version = "1.0.71"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d26a6ce4b6a484fa3edb70f7efa6fc430fd2b87285fe8b84304fd0936faa0dc0"
+checksum = "79c2681d6594606957bbb8631c4b90a7fcaaa72cdb714743a437b156d6a7eedd"
 
 [[package]]
 name = "cfg-if"
@@ -618,9 +607,9 @@ dependencies = [
 
 [[package]]
 name = "der"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2adca118c71ecd9ae094d4b68257b3fdfcb711a612b9eec7b5a0d27a5a70a5b4"
+checksum = "28e98c534e9c8a0483aa01d6f6913bc063de254311bd267c9cf535e9b70e15b2"
 dependencies = [
  "const-oid",
 ]
@@ -909,17 +898,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "futures_derive"
-version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
-dependencies = [
- "proc-macro-error",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "generate"
 version = "0.1.0"
 dependencies = [
@@ -1003,9 +981,9 @@ dependencies = [
 
 [[package]]
 name = "h2"
-version = "0.3.4"
+version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7f3675cfef6a30c8031cf9e6493ebdc3bb3272a3fea3923c4210d1830e6a472"
+checksum = "6c06815895acec637cd6ed6e9662c935b866d20a106f8361892893a7d9234964"
 dependencies = [
  "bytes",
  "fnv",
@@ -1239,10 +1217,81 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b33c9a5c599d67d051c4dc25eb1b6b4ef715d1763c20c85c688717a1734f204e"
 
 [[package]]
-name = "iroha"
+name = "iroha_actor"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
+ "async-trait",
+ "dashmap",
+ "eyre",
+ "futures",
+ "iroha_actor_derive",
+ "iroha_logger",
+ "once_cell",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
+name = "iroha_actor_derive"
+version = "0.1.0"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
+dependencies = [
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "iroha_client"
+version = "0.1.0"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
+dependencies = [
+ "attohttpc",
+ "eyre",
+ "http",
+ "iroha_config",
+ "iroha_core",
+ "iroha_crypto",
+ "iroha_derive",
+ "iroha_dsl",
+ "iroha_logger",
+ "iroha_telemetry",
+ "iroha_version",
+ "serde",
+ "serde_json",
+ "tracing",
+ "tungstenite",
+]
+
+[[package]]
+name = "iroha_config"
+version = "0.1.0"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
+dependencies = [
+ "iroha_config_derive",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "iroha_config_derive"
+version = "0.1.0"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
+dependencies = [
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "iroha_core"
+version = "0.1.0"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
+dependencies = [
+ "async-stream",
  "async-trait",
  "chrono",
  "crossbeam-queue",
@@ -1273,68 +1322,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "iroha_actor"
-version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
-dependencies = [
- "actor_derive",
- "async-trait",
- "dashmap",
- "eyre",
- "futures",
- "iroha_logger",
- "once_cell",
- "thiserror",
- "tokio",
-]
-
-[[package]]
-name = "iroha_client"
-version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
-dependencies = [
- "attohttpc",
- "eyre",
- "http",
- "iroha",
- "iroha_config",
- "iroha_crypto",
- "iroha_derive",
- "iroha_dsl",
- "iroha_logger",
- "iroha_telemetry",
- "iroha_version",
- "serde",
- "serde_json",
- "tracing",
- "tungstenite",
-]
-
-[[package]]
-name = "iroha_config"
-version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
-dependencies = [
- "iroha_config_derive",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "iroha_config_derive"
-version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
-dependencies = [
- "proc-macro-error",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "iroha_crypto"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "eyre",
  "hex",
@@ -1349,7 +1339,7 @@ dependencies = [
 [[package]]
 name = "iroha_data_model"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "chrono",
  "dashmap",
@@ -1370,7 +1360,7 @@ dependencies = [
 [[package]]
 name = "iroha_derive"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "iroha_macro",
  "parity-scale-codec",
@@ -1383,7 +1373,7 @@ dependencies = [
 [[package]]
 name = "iroha_dsl"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "iroha_data_model",
 ]
@@ -1391,9 +1381,9 @@ dependencies = [
 [[package]]
 name = "iroha_futures"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
- "futures_derive",
+ "iroha_futures_derive",
  "iroha_logger",
  "rand 0.8.4",
  "serde",
@@ -1403,9 +1393,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "iroha_futures_derive"
+version = "0.1.0"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
+dependencies = [
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "iroha_logger"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "chrono",
  "color-eyre",
@@ -1422,7 +1423,7 @@ dependencies = [
 [[package]]
 name = "iroha_macro"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "eyre",
  "parity-scale-codec",
@@ -1431,7 +1432,7 @@ dependencies = [
 [[package]]
 name = "iroha_p2p"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "aead",
  "async-stream",
@@ -1461,7 +1462,7 @@ dependencies = [
  "iroha_data_model",
  "iroha_version",
  "parity-scale-codec",
- "pyo3",
+ "pyo3 0.14.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "pythonize",
  "serde",
  "serde_json",
@@ -1470,7 +1471,7 @@ dependencies = [
 [[package]]
 name = "iroha_schema"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "fixnum",
  "iroha_schema_derive",
@@ -1482,7 +1483,7 @@ dependencies = [
 [[package]]
 name = "iroha_schema_derive"
 version = "0.0.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "parity-scale-codec",
  "proc-macro2",
@@ -1493,7 +1494,7 @@ dependencies = [
 [[package]]
 name = "iroha_telemetry"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "futures",
  "iroha_futures",
@@ -1509,7 +1510,7 @@ dependencies = [
 [[package]]
 name = "iroha_version"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "eyre",
  "iroha_derive",
@@ -1526,7 +1527,7 @@ dependencies = [
 [[package]]
 name = "iroha_version_derive"
 version = "0.1.0"
-source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#73c3185160a09d4dbcf0d2987e5b6fb823256250"
+source = "git+https://github.com/hyperledger/iroha?branch=iroha2-dev#f2349600be54d7f66705ffe59eb83b690b3d313c"
 dependencies = [
  "iroha_derive",
  "iroha_macro",
@@ -1826,9 +1827,9 @@ checksum = "2386b4ebe91c2f7f51082d4cefa145d030e33a1842a96b12e4885cc3c01f7a55"
 
 [[package]]
 name = "parity-scale-codec"
-version = "2.3.0"
+version = "2.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e11263a97373b43da4b426edbb52ef99a7b51e2d9752ef56a7f8b356f48495a5"
+checksum = "373b1a4c1338d9cd3d1fa53b3a11bdab5ab6bd80a20f7f7becd76953ae2be909"
 dependencies = [
  "arrayvec",
  "bitvec",
@@ -1840,9 +1841,9 @@ dependencies = [
 
 [[package]]
 name = "parity-scale-codec-derive"
-version = "2.3.0"
+version = "2.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b157dc92b3db2bae522afb31b3843e91ae097eb01d66c72dda66a2e86bc3ca14"
+checksum = "1557010476e0595c9b568d16dcfb81b93cdeb157612726f5170d31aa707bed27"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -2041,9 +2042,20 @@ dependencies = [
  "libc",
  "parking_lot",
  "paste",
- "pyo3-build-config",
+ "pyo3-build-config 0.14.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "pyo3-macros",
  "unindent",
+]
+
+[[package]]
+name = "pyo3"
+version = "0.14.5"
+source = "git+https://github.com/PyO3/pyo3?rev=4ea03a3159401a91de7042726f2451317c955316#4ea03a3159401a91de7042726f2451317c955316"
+dependencies = [
+ "cfg-if",
+ "libc",
+ "parking_lot",
+ "pyo3-build-config 0.14.5 (git+https://github.com/PyO3/pyo3?rev=4ea03a3159401a91de7042726f2451317c955316)",
 ]
 
 [[package]]
@@ -2051,6 +2063,14 @@ name = "pyo3-build-config"
 version = "0.14.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d12961738cacbd7f91b7c43bc25cfeeaa2698ad07a04b3be0aa88b950865738f"
+dependencies = [
+ "once_cell",
+]
+
+[[package]]
+name = "pyo3-build-config"
+version = "0.14.5"
+source = "git+https://github.com/PyO3/pyo3?rev=4ea03a3159401a91de7042726f2451317c955316#4ea03a3159401a91de7042726f2451317c955316"
 dependencies = [
  "once_cell",
 ]
@@ -2073,7 +2093,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "71623fc593224afaab918aa3afcaf86ed2f43d34f6afde7f3922608f253240df"
 dependencies = [
  "proc-macro2",
- "pyo3-build-config",
+ "pyo3-build-config 0.14.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote",
  "syn",
 ]
@@ -2081,9 +2101,9 @@ dependencies = [
 [[package]]
 name = "pythonize"
 version = "0.14.0"
-source = "git+https://github.com/i1i1/pythonize?branch=dict#3c650500abd3126ee99e82d304d3ed0361e2fc81"
+source = "git+https://github.com/i1i1/pythonize?branch=dict#889987bf7f1acde46bf4ab9cc3400f0dfbafced5"
 dependencies = [
- "pyo3",
+ "pyo3 0.14.5 (git+https://github.com/PyO3/pyo3?rev=4ea03a3159401a91de7042726f2451317c955316)",
  "serde",
 ]
 
@@ -2095,9 +2115,9 @@ checksum = "a1d01941d82fa2ab50be1e79e6714289dd7cde78eba4c074bc5a4374f650dfe0"
 
 [[package]]
 name = "quote"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3d0b9745dc2debf507c8422de05d7226cc1f0644216dfdfead988f9b1ab32a7"
+checksum = "38bc8cc6a5f2e3655e0899c1b848643b2562f853f114bfec7be120678e3ace05"
 dependencies = [
  "proc-macro2",
 ]
@@ -2536,9 +2556,9 @@ checksum = "c307a32c1c5c437f38c7fd45d753050587732ba8628319fbdf12a7e289ccc590"
 
 [[package]]
 name = "smallvec"
-version = "1.6.1"
+version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe0f37c9e8f3c5a4a66ad655a93c74daac4ad00c441533bf5c6e7990bb42604e"
+checksum = "1ecab6c735a6bb4139c0caafd0cc3635748bbb3acf4550e8138122099251f309"
 
 [[package]]
 name = "socket2"
@@ -2621,9 +2641,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.77"
+version = "1.0.80"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5239bc68e0fef57495900cfea4e8dc75596d9a319d7e16b1e0a440d24e6fe0a0"
+checksum = "d010a1623fbd906d51d650a9916aaefc05ffa0e4053ff7fe601167f3e715d194"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2632,9 +2652,9 @@ dependencies = [
 
 [[package]]
 name = "synstructure"
-version = "0.12.5"
+version = "0.12.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "474aaa926faa1603c40b7885a9eaea29b444d1cb2850cb7c0e37bb1a4182f4fa"
+checksum = "f36bdaa60a83aca3921b5259d5400cbf5e90fc51931376a9bd4a0eb79aa7210f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2673,18 +2693,18 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.29"
+version = "1.0.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "602eca064b2d83369e2b2f34b09c70b605402801927c65c11071ac911d299b88"
+checksum = "854babe52e4df1653706b98fcfc05843010039b406875930a70e4d9644e5c417"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.29"
+version = "1.0.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bad553cc2c78e8de258400763a647e80e6d1b31ee237275d756f6836d204494c"
+checksum = "aa32fd3f627f367fe16f893e2597ae3c05020f8bba2666a4e6ea73d377e5714b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2744,9 +2764,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-macros"
-version = "1.3.0"
+version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "54473be61f4ebe4efd09cec9bd5d16fa51d70ea0192213d754d2d500457db110"
+checksum = "154794c8f499c2619acd19e839294703e9e32e7630ef5f46ea80d4ef0fbee5eb"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2808,9 +2828,9 @@ checksum = "360dfd1d6d30e05fda32ace2c8c70e9c0a9da713275777f5a4dbb8a1893930c6"
 
 [[package]]
 name = "tracing"
-version = "0.1.28"
+version = "0.1.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "84f96e095c0c82419687c20ddf5cb3eadb61f4e1405923c9dc8e53a1adacbda8"
+checksum = "375a639232caf30edfc78e8d89b2d4c375515393e7af7e16f01cd96917fb2105"
 dependencies = [
  "cfg-if",
  "log",
@@ -2821,9 +2841,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-attributes"
-version = "0.1.16"
+version = "0.1.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98863d0dd09fa59a1b79c6750ad80dbda6b75f4e71c437a6a1a8cb91a8bcbd77"
+checksum = "f4f480b8f81512e825f337ad51e94c1eb5d3bbdf2b363dcd01e2b19a9ffe3f8e"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2832,9 +2852,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-core"
-version = "0.1.20"
+version = "0.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46125608c26121c81b0c6d693eab5a420e416da7e43c426d2e8f7df8da8a3acf"
+checksum = "1f4ed65637b8390770814083d20756f87bfa2c21bf2f110babdc5438351746e4"
 dependencies = [
  "lazy_static",
 ]
@@ -2861,9 +2881,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-subscriber"
-version = "0.2.24"
+version = "0.2.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fdd0568dbfe3baf7048b7908d2b32bca0d81cd56bec6d2a8f894b01d74f86be3"
+checksum = "0e0d2eaa99c3c2e41547cfa109e910a68ea03823cccad4a0525dcbc9b01e8c71"
 dependencies = [
  "ansi_term 0.12.1",
  "sharded-slab",
@@ -2923,9 +2943,9 @@ dependencies = [
 
 [[package]]
 name = "unicode-bidi"
-version = "0.3.6"
+version = "0.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "246f4c42e67e7a4e3c6106ff716a5d067d4132a642840b242e357e468a2a0085"
+checksum = "1a01404663e3db436ed2746d9fefef640d868edae3cceb81c3b8d5732fda678f"
 
 [[package]]
 name = "unicode-normalization"
